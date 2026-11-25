@@ -1,0 +1,276 @@
+{
+  "$schema": "https://raw.githubusercontent.com/LingCore/WinShun-plugins/main/schema/plugin.schema.json",
+  "manifest": 1,
+  "id": "learning-kai.obsidian-todo",
+  "name": {
+    "zh": "Obsidian 待办便签",
+    "en": "Obsidian Todo Sticky"
+  },
+  "version": "1.3.1",
+  "description": {
+    "zh": "暖纸极简风 Obsidian 桌面待办便签（与 Tasks.md 实时双向同步），内置桌面倒计时磁贴（搜「倒计时 分钟数」即开即用）。",
+    "en": "Warm-paper minimalist Obsidian desktop todo sticky tile synced with Tasks.md, plus a floating desktop countdown tile."
+  },
+  "author": "learning-kai",
+  "homepage": "https://github.com/learning-kai/winshun-obsidian-todo",
+  "license": "MIT",
+  "icon": "icon.png",
+  "trayMenu": {
+    "zh": "Obsidian 待办",
+    "en": "Obsidian Todo"
+  },
+  "runtime": {
+    "mode": "resident",
+    "program": "python",
+    "script": "main.py",
+    "start": "eager",
+    "idleExitSec": 0,
+    "timeoutMs": 5000,
+    "debounceMs": 0,
+    "sandbox": "normal"
+  },
+  "permissions": [
+    "files:read",
+    "files:write",
+    "ui",
+    "winshun:open"
+  ],
+  "commands": [
+    {
+      "id": "otodo",
+      "keyword": [
+        "otodo",
+        "bq",
+        "td",
+        "便签",
+        "清单",
+        "待办便签"
+      ],
+      "title": {
+        "zh": "Obsidian 待办便签",
+        "en": "Obsidian Todo Sticky"
+      },
+      "description": {
+        "zh": "开关桌面待办便签，或在搜索框中查看、筛选、勾选与新增 Tasks.md 待办。",
+        "en": "Toggle desktop sticky note or view, filter, check, and add Tasks.md todos."
+      },
+      "hint": {
+        "zh": "直接查看待办或开关便签；输入关键词筛选或输入新内容按 Enter 添加",
+        "en": "View todos or toggle sticky; type to filter or add a new task"
+      },
+      "icon": "ph:note-pencil",
+      "cache": 0
+    },
+    {
+      "id": "countdown",
+      "keyword": [
+        "倒计时",
+        "djs",
+        "timer"
+      ],
+      "title": {
+        "zh": "倒计时",
+        "en": "Countdown"
+      },
+      "description": {
+        "zh": "输入分钟数立刻开启极简暖纸风桌面倒计时磁贴（如：倒计时 25 或 倒计时 40 复习）。",
+        "en": "Type minutes to start a minimalist desktop countdown tile."
+      },
+      "hint": {
+        "zh": "输入分钟数（如 25、40 复习、1.5h、90s），回车弹出倒计时磁贴",
+        "en": "Enter minutes (e.g. 25, 40 Study, 1.5h, 90s)"
+      },
+      "icon": "ph:timer",
+      "cache": 0
+    }
+  ],
+  "settings": [
+    {
+      "key": "vault",
+      "type": "folder",
+      "title": {
+        "zh": "Obsidian Vault 目录",
+        "en": "Obsidian Vault folder"
+      },
+      "hint": {
+        "zh": "与 888bik.obsidian-quicknote 的 Vault 1 填同一个目录即可双向同步。",
+        "en": "Pick the same Obsidian Vault root configured in 888bik.obsidian-quicknote."
+      },
+      "default": ""
+    },
+    {
+      "key": "todo_file",
+      "type": "text",
+      "title": {
+        "zh": "待办文件（Vault 内相对路径）",
+        "en": "Todo file (vault-relative path)"
+      },
+      "hint": {
+        "zh": "默认 Tasks.md，需与 888bik.obsidian-quicknote 的待办文件一致；不允许绝对路径或 ..。",
+        "en": "Relative path inside the Vault (default Tasks.md). Absolute paths and .. are rejected."
+      },
+      "default": "Tasks.md"
+    },
+    {
+      "key": "show_on_start",
+      "type": "bool",
+      "title": {
+        "zh": "启动时显示桌面便签",
+        "en": "Show sticky note on startup"
+      },
+      "default": true
+    },
+    {
+      "key": "always_on_top",
+      "type": "bool",
+      "title": {
+        "zh": "默认窗口置顶",
+        "en": "Keep window always on top"
+      },
+      "default": true
+    },
+    {
+      "key": "opacity",
+      "type": "number",
+      "title": {
+        "zh": "便签不透明度",
+        "en": "Sticky note opacity"
+      },
+      "hint": {
+        "zh": "范围 50%–100%，也可在便签右上角齿轮里实时拖动调节。",
+        "en": "50%-100%; can also be adjusted live from the sticky note popover."
+      },
+      "default": 96,
+      "min": 50,
+      "max": 100,
+      "step": 2,
+      "unit": "%"
+    },
+    {
+      "key": "style_preset",
+      "type": "choice",
+      "title": {
+        "zh": "磁贴配色风格",
+        "en": "Tile color style"
+      },
+      "hint": {
+        "zh": "暖纸极简（浅色暖米白 / 深色暖墨灰）或跟随 Win顺 系统配色。",
+        "en": "Warm paper (light/dark) or WinShun native palette."
+      },
+      "default": "huajian",
+      "options": [
+        {
+          "value": "huajian",
+          "title": {
+            "zh": "暖纸极简",
+            "en": "Warm Paper"
+          }
+        },
+        {
+          "value": "winshun",
+          "title": {
+            "zh": "跟随 Win顺 配色",
+            "en": "Follow WinShun"
+          }
+        }
+      ]
+    },
+    {
+      "key": "show_timestamps",
+      "type": "bool",
+      "title": {
+        "zh": "在便签中显示创建时间",
+        "en": "Show timestamps in sticky tile"
+      },
+      "hint": {
+        "zh": "默认关闭以保持极简磁贴排版（悬停任务时仍可查看创建时间）。",
+        "en": "Off by default for a clean paper look (still shown on hover)."
+      },
+      "default": false
+    },
+    {
+      "key": "hotkey",
+      "type": "hotkey",
+      "title": {
+        "zh": "显示 / 隐藏便签全局快捷键",
+        "en": "Show / hide sticky note hotkey"
+      },
+      "hint": {
+        "zh": "默认 Ctrl+Alt+B；留空则不注册全局快捷键。若提示被占用请更换组合键。",
+        "en": "Default Ctrl+Alt+B; leave empty to disable global hotkey."
+      },
+      "default": "Ctrl+Alt+B"
+    },
+    {
+      "key": "hide_completed",
+      "type": "bool",
+      "title": {
+        "zh": "在「全部」视图隐藏已完成待办",
+        "en": "Hide completed tasks in All view"
+      },
+      "default": false
+    },
+    {
+      "key": "add_timestamp_source",
+      "type": "bool",
+      "title": {
+        "zh": "兼容 obsidian-quicknote 时间与来源标记",
+        "en": "Include timestamp & WinShun source marker"
+      },
+      "hint": {
+        "zh": "开启后写入 - [ ] [YYYY-MM-DD HH:MM] 内容 <!-- source: Win顺 -->；关闭则写简洁 - [ ] 内容。",
+        "en": "Write - [ ] [YYYY-MM-DD HH:MM] text <!-- source: Win顺 -->; turn off for plain - [ ] text."
+      },
+      "default": true
+    },
+    {
+      "key": "countdown_shape",
+      "type": "choice",
+      "title": {
+        "zh": "倒计时磁贴外观",
+        "en": "Countdown tile shape"
+      },
+      "hint": {
+        "zh": "方形水彩卡片、圆形渐变表盘或极简胶囊条，也可在倒计时磁贴悬停一键循环切换。",
+        "en": "Watercolor square card, circular gradient dial, or dynamic pill bar."
+      },
+      "default": "square",
+      "options": [
+        {
+          "value": "square",
+          "title": {
+            "zh": "方形卡片",
+            "en": "Square Card"
+          }
+        },
+        {
+          "value": "circle",
+          "title": {
+            "zh": "圆形表盘",
+            "en": "Circular Dial"
+          }
+        },
+        {
+          "value": "pill",
+          "title": {
+            "zh": "极简胶囊条",
+            "en": "Minimal Pill"
+          }
+        }
+      ]
+    },
+    {
+      "key": "countdown_sound",
+      "type": "bool",
+      "title": {
+        "zh": "倒计时结束播放提示音",
+        "en": "Play a chime when countdown finishes"
+      },
+      "hint": {
+        "zh": "播放内置定制的柔润绒音风铃（chime.wav），轻柔不刺耳；也可替换插件目录中的 chime.wav 自定义。",
+        "en": "Plays the bundled gentle felt-celesta chime (chime.wav) instead of the sharp Windows alert."
+      },
+      "default": true
+    }
+  ]
+}
